@@ -13,7 +13,10 @@ function kb_broadlinkSP(log, config, api) {
     this.ip = config['ip'];
     this.name = config['name'];
     this.mac = config['mac'];
+    this.serialNumber = config.serialNumber || '';
     this.powered = false;
+
+    this.updateTimeout   = config.updateTimeout || 30000;
 
     if (!this.ip && !this.mac) throw new Error("You must provide a config value for 'ip' or 'mac'.");
 
@@ -35,24 +38,39 @@ function kb_broadlinkSP(log, config, api) {
         return mb;
     }
 
+    this.broadlinkApi = new broadlink();
+
     this.service = new Service.Switch(this.name);
 
     this.service.getCharacteristic(Characteristic.On)
         .on('get', this.getState.bind(this))
-        .on('set', this.setState.bind(this));
+        .on('set', this.setState.bind(this))
+    ;
 
     this.accessoryInformationService = new Service.AccessoryInformation()
         .setCharacteristic(Characteristic.Manufacturer, 'Broadlink')
         .setCharacteristic(Characteristic.Model, 'SP')
-        .setCharacteristic(Characteristic.SerialNumber, '1.0')
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
+    ;
+
+    that._getStatusData();
+    that.updateInverval = setInterval(function(){
+        that._getStatusData();
+    }, that.updateTimeout);
 }
 
 kb_broadlinkSP.prototype.getState = function(callback) {
-    var self = this
-    var b = new broadlink();
-    b.discover();
+    var self = this;
 
-    b.on("deviceReady", (dev) => {
+    callback(null, self.powered);
+};
+
+kb_broadlinkSP.prototype._getStatusData = function(){
+    var self = this
+   
+    this.broadlinkApi.discover();
+
+    this.broadlinkApi.on("deviceReady", (dev) => {
         if (self.mac_buff(self.mac).equals(dev.mac) || dev.host.address == self.ip) {
             dev.check_power();
             dev.on("power", (pwr) => {
@@ -60,29 +78,27 @@ kb_broadlinkSP.prototype.getState = function(callback) {
                 dev.exit();
                 if (!pwr) {
                     self.powered = false;
-                    return callback(null, false);
                 } else {
                     self.powered = true;
-                    return callback(null, true);
                 }
             });
         } else {
             dev.exit();
         }
     });
-}
+};
 
 kb_broadlinkSP.prototype.setState = function(state, callback) {
     var self = this
-    var b = new broadlink();
-    b.discover();
+   
+    this.broadlinkApi.discover();
 
     self.log("set SP state: " + state);
     if (state) {
         if (this.powered) {
             return callback(null, true)
         } else {
-            b.on("deviceReady", (dev) => {
+            this.broadlinkApi.on("deviceReady", (dev) => {
                 if (self.mac_buff(self.mac).equals(dev.mac) || dev.host.address == self.ip) {
                     self.log("ON!");
                     dev.set_power(true);
@@ -96,7 +112,7 @@ kb_broadlinkSP.prototype.setState = function(state, callback) {
         }
     } else {
         if (this.powered) {
-            b.on("deviceReady", (dev) => {
+            this.broadlinkApi.on("deviceReady", (dev) => {
                 if (self.mac_buff(self.mac).equals(dev.mac) || dev.host.address == self.ip) {
                     self.log("OFF!");
                     dev.set_power(false);
