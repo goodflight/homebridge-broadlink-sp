@@ -5,10 +5,10 @@ module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
 
-    homebridge.registerAccessory("homebridge-broadlink-sp", "broadlinkSP", broadlinkSP);
+    homebridge.registerAccessory("homebridge-kb-broadlink-sp", "kb_broadlinkSP", kb_broadlinkSP);
 }
 
-function broadlinkSP(log, config, api) {
+function kb_broadlinkSP(log, config, api) {
     this.log = log;
     this.ip = config['ip'];
     this.name = config['name'];
@@ -47,7 +47,7 @@ function broadlinkSP(log, config, api) {
         .setCharacteristic(Characteristic.SerialNumber, '1.0')
 }
 
-broadlinkSP.prototype.getState = function(callback) {
+kb_broadlinkSP.prototype.getState = function(callback) {
     var self = this
     var b = new broadlink();
     b.discover();
@@ -72,7 +72,7 @@ broadlinkSP.prototype.getState = function(callback) {
     });
 }
 
-broadlinkSP.prototype.setState = function(state, callback) {
+kb_broadlinkSP.prototype.setState = function(state, callback) {
     var self = this
     var b = new broadlink();
     b.discover();
@@ -113,7 +113,7 @@ broadlinkSP.prototype.setState = function(state, callback) {
     }
 }
 
-broadlinkSP.prototype.getServices = function() {
+kb_broadlinkSP.prototype.getServices = function() {
     return [
         this.service,
         this.accessoryInformationService

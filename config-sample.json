@@ -9,12 +9,12 @@
     "description": "This is an example configuration for the Broadlink SP homebridge plugin",
 
     "accessories": [{
-            "accessory": "broadlinkSP",
+            "accessory": "kb_broadlinkSP",
             "name": "My Broadlink SP1",
             "ip": "192.168.1.13"
         },
         {
-            "accessory": "broadlinkSP",
+            "accessory": "kb_broadlinkSP",
             "name": "My Broadlink SP2",
             "mac": "34:ea:34:e4:00:22"
         }
