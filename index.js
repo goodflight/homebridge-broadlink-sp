@@ -9,6 +9,8 @@ module.exports = function(homebridge) {
 }
 
 function kb_broadlinkSP(log, config, api) {
+    var that = this;
+
     this.log = log;
     this.ip = config['ip'];
     this.name = config['name'];
@@ -52,6 +54,7 @@ function kb_broadlinkSP(log, config, api) {
         .setCharacteristic(Characteristic.Model, 'SP')
         .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
     ;
+
 
     that._getStatusData();
     that.updateInverval = setInterval(function(){
