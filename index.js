@@ -59,6 +59,15 @@ function kb_broadlinkSP(log, config, api) {
 kb_broadlinkSP.prototype.getState = function(callback) {
     var self = this;
 
+    
+    callback(null, self.powered);
+
+    
+};
+
+kb_broadlinkSP.prototype._getStatusData = function(){
+    var self = this
+
     var b = new broadlink();
    
     b.on("deviceReady", (dev) => {
@@ -72,7 +81,7 @@ kb_broadlinkSP.prototype.getState = function(callback) {
                 } else {
                     self.powered = true;
                 }
-                callback(null, self.powered);
+                
             });
         } else {
             dev.exit();
@@ -81,13 +90,6 @@ kb_broadlinkSP.prototype.getState = function(callback) {
     });
 
     b.discover(self.ip);
-
-    
-};
-
-kb_broadlinkSP.prototype._getStatusData = function(){
-    var self = this
-
     
 };
 
