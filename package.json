@@ -21,9 +21,7 @@
   "_where": "/home/pi",
   "author": "",
   "bundleDependencies": [],
-  "dependencies": {
-    "broadlinkjs-sm": ">=0.1.5"
-  },
+  "dependencies": {},
   "deprecated": false,
   "description": "Homebridge plugin for Broadlink SP2/3",
   "engines": {
@@ -50,5 +48,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.1.7"
+  "version": "0.1.8"
 }

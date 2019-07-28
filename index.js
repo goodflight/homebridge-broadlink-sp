@@ -1,5 +1,5 @@
 var Service, Characteristic;
-var broadlink = require('broadlinkjs-sm');
+var broadlink = require('./broadlinkjs');
 const { version } = require("./package.json");
 
 module.exports = function(homebridge) {
@@ -109,7 +109,7 @@ kb_broadlinkSP.prototype.getState = function(callback) {
         }
     });
 
-    b.discover(self.ip);
+    b.discover(self.ip, self.log);
     
 };
 
@@ -138,21 +138,22 @@ kb_broadlinkSP.prototype.setState = function(state, callback) {
    
     var b = new broadlink();
  
-    self.log("try set SP state: " + state);
     
     b.on("deviceReady", (dev) => {
+       
         if (self.mac_buff(self.mac).equals(dev.mac) || dev.host.address == self.ip) {
+
             dev.set_power(state);
             dev.exit();
             self.powered = state;
-           
             real_result = true;
+            
         } else {
             dev.exit();
         }
     });
 
-    b.discover(self.ip);
+    b.discover(self.ip, self.log);
 
 };
 
