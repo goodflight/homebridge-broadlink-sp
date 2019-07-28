@@ -20,7 +20,7 @@
   "_spec": "git+https://kuzenkos@bitbucket.org/kuzenkos/homebridge-broadlink-sp.git",
   "_where": "/home/pi",
   "author": "",
-  "bundleDependencies": false,
+  "bundleDependencies": [],
   "dependencies": {
     "broadlinkjs-sm": ">=0.1.5"
   },
