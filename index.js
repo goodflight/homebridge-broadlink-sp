@@ -10,21 +10,24 @@ module.exports = function(homebridge) {
 }
 
 function kb_broadlinkSP(log, config, api) {
-    var that = this;
-
-    this.log = log;
+    
     this.ip = config['ip'];
     this.name = config['name'];
     this.mac = config['mac'];
-    this.stepsCount = config['stepsCount'];
-    if(!this.stepsCount){
-        this.stepsCount = 3;
-    }
     this.serialNumber = config.serialNumber || '';
+
+
+    this.timeoutStep = 300;
+
+    if(config['timeout']){
+        this.stepsCount = Math.round(config['timeout']/this.timeoutStep);
+    }else{
+        this.stepsCount = 5;
+    }
+
+
     this.powered = false;
-
-
-
+    this.log = log;
     this.updateTimeout   = config.updateTimeout || 30000;
 
     if (!this.ip && !this.mac) throw new Error("You must provide a config value for 'ip' or 'mac'.");
@@ -80,7 +83,7 @@ kb_broadlinkSP.prototype.getState = function(callback) {
                 self.log("old_result get SP state: " + self.powered, ", step:", step);
                 callback(null, self.powered);
             }
-        }, 500);
+        }, self.timeoutStep);
     };
 
     callbackStep();
@@ -131,7 +134,7 @@ kb_broadlinkSP.prototype.setState = function(state, callback) {
                 self.log("err_result set SP state, step:", step);
                 callback('error');
             }
-        }, 500);
+        }, self.timeoutStep);
     };
 
     callbackStep();
