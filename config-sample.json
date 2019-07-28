@@ -12,13 +12,15 @@
             "accessory": "kb_broadlinkSP",
             "name": "My Broadlink SP1",
             "ip": "192.168.1.13",
-            "serialNumber": "000100101234430F"
+            "serialNumber": "000100101234430F",
+            "stepsCount": 2
         },
         {
             "accessory": "kb_broadlinkSP",
             "name": "My Broadlink SP2",
             "mac": "34:ea:34:e4:00:22",
-            "serialNumber": "000100101234430F"
+            "serialNumber": "000100101234430F",
+            "stepsCount": 3
         }
     ]
 }
