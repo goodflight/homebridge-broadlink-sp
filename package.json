@@ -22,7 +22,7 @@
   "author": "",
   "bundleDependencies": false,
   "dependencies": {
-    "broadlink-js-smth": ">=1.0.0"
+    "broadlinkjs-sm": ">=0.1.5"
   },
   "deprecated": false,
   "description": "Homebridge plugin for Broadlink SP2/3",
@@ -50,5 +50,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.1.6"
+  "version": "0.1.7"
 }
